@@ -1,0 +1,169 @@
+#
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# yamllint disable rule:comments-indentation
+conf:
+  listen:
+    host: 0.0.0.0  # The address on which the `Manager API` should listen.
+    port: 9000     # The port on which the `Manager API` should listen.
+
+  # Uncomment and configure SSL settings if HTTPS is required.
+  # ssl:
+  #   host: 0.0.0.0     # The address for HTTPS.
+  #   port: 9001        # The port for HTTPS.
+  #   cert: "/tmp/cert/example.crt"  # Path to your SSL certificate.
+  #   key:  "/tmp/cert/example.key"  # Path to your SSL key.
+
+  allow_list: []  # Access control list. If empty, allows all IPs by default.
+    # Supports CIDR notation, e.g., 192.168.1.0/24 or 2001:0db8::/32.
+
+  etcd:
+    endpoints:  # ETCD service endpoints.
+      - http://etcd:2379  # Use the Docker Compose service name `etcd`.
+    # Uncomment and set if ETCD authentication is enabled.
+    # username: "root"
+    # password: "123456"
+    mtls:
+      key_file: ""     # Path to the client key for mTLS.
+      cert_file: ""    # Path to the client certificate for mTLS.
+      ca_file: ""      # Path to the CA certificate for mTLS.
+    # prefix: /apisix  # ETCD prefix for APISIX configurations. Defaults to /apisix.
+
+  log:
+    error_log:
+      level: warn  # Log level: debug, info, warn, error, panic, fatal.
+      file_path: logs/error.log  # Path to the error log file.
+    access_log:
+      file_path: logs/access.log  # Path to the access log file.
+      # Example log entry:
+      # 2020-12-09T16:38:09.039+0800    INFO    filter/logging.go:46    /apisix/admin/routes/r1 {"status": 401, "host": "127.0.0.1:9000", ...}
+
+  max_cpu: 0  # Number of OS threads for parallelism. 0 uses all available cores.
+
+
+  # Optional security configurations.
+  security:
+    #access_control_allow_origin: "http://httpbin.org"
+    access_control_allow_credentials: true
+    access_control_allow_headers: "Authorization"
+    access_control_allow_methods: "*"
+    x_frame_options: "allow-from *"
+    content_security_policy: "frame-src *;"
+
+
+
+authentication:
+  secret: secret  # Secret for JWT token generation. Change this in production.
+  expire_time: 3600  # JWT token expiration time in seconds.
+  users:
+    - username: admin  # User credentials for Manager API access.
+      password: admin
+    - username: user
+      password: user
+
+oidc:
+  enabled: false  # Set to true to enable OpenID Connect.
+  expire_time: 3600
+  client_id: dashboard
+  client_secret: dashboard
+  auth_url: http://172.17.0.1:8080/auth/realms/master/protocol/openid-connect/auth
+  token_url: http://172.17.0.1:8080/auth/realms/master/protocol/openid-connect/token
+  user_info_url: http://172.17.0.1:8080/auth/realms/master/protocol/openid-connect/userinfo
+  redirect_url: http://127.0.0.1:9000/apisix/admin/oidc/callback
+  scope: openid
+
+plugins:
+  - api-breaker
+  - authz-casbin
+  - authz-casdoor
+  - authz-keycloak
+  - aws-lambda
+  - azure-functions
+  - basic-auth
+  # - batch-requests
+  - clickhouse-logger
+  - client-control
+  - consumer-restriction
+  - cors
+  - csrf
+  - datadog
+  # - dubbo-proxy
+  - echo
+  - error-log-logger
+  # - example-plugin
+  - ext-plugin-post-req
+  - ext-plugin-post-resp
+  - ext-plugin-pre-req
+  - fault-injection
+  - file-logger
+  - forward-auth
+  - google-cloud-logging
+  - grpc-transcode
+  - grpc-web
+  - gzip
+  - hmac-auth
+  - http-logger
+  - ip-restriction
+  - jwt-auth
+  - kafka-logger
+  - kafka-proxy
+  - key-auth
+  - ldap-auth
+  - limit-conn
+  - limit-count
+  - limit-req
+  - loggly
+  # - log-rotate
+  - mocking
+  # - node-status
+  - opa
+  - openid-connect
+  - opentelemetry
+  - openwhisk
+  - prometheus
+  - proxy-cache
+  - proxy-control
+  - proxy-mirror
+  - proxy-rewrite
+  - public-api
+  - real-ip
+  - redirect
+  - referer-restriction
+  - request-id
+  - request-validation
+  - response-rewrite
+  - rocketmq-logger
+  - server-info
+  - serverless-post-function
+  - serverless-pre-function
+  - skywalking
+  - skywalking-logger
+  - sls-logger
+  - splunk-hec-logging
+  - syslog
+  - tcp-logger
+  - traffic-split
+  - ua-restriction
+  - udp-logger
+  - uri-blocker
+  - wolf-rbac
+  - zipkin
+  - elasticsearch-logger
+  - openfunction
+  - tencent-cloud-cls
+  - ai
+  - cas-auth
