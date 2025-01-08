@@ -65,7 +65,7 @@ services:
       - apisix
 
   grafana:
-    image: grafana/grafana:7.3.7
+    image: grafana/grafana:${GRAFANA_VERSION}
     restart: always
     ports:
       - "3000:3000"
