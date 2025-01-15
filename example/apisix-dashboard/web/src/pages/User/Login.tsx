@@ -19,7 +19,7 @@ import { Button, notification, Tabs } from 'antd';
 import React, { useState } from 'react';
 import { history, Link, useIntl } from 'umi';
 
-import logo from '@/assets/logo.svg';
+import logo from '@/assets/logor.svg';
 import Footer from '@/components/Footer';
 import { getUrlQuery } from '@/helpers';
 import LoginMethodPassword from '@/pages/User/components/LoginMethodPassword';
