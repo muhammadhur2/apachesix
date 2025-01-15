@@ -71,7 +71,7 @@ authentication:
   expire_time: 3600  # JWT token expiration time in seconds.
   users:
     - username: admin  # User credentials for Manager API access.
-      password: admin
+      password: admin1
     - username: user
       password: user
 
